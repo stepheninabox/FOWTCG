@@ -1,4 +1,4 @@
-package com.inabox.stephen.fowtcg;
+package com.inabox.stephen.fowtcg.ui;
 
 import android.text.Html;
 import android.view.LayoutInflater;
@@ -8,7 +8,7 @@ import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import com.codesmyth.droidcook.common.widget.ViewBinder;
-import com.inabox.stephen.fowtcg.ui.CardsAdapter;
+import com.inabox.stephen.fowtcg.R;
 
 public class CardsItem extends ViewBinder<CardsAdapter> implements View.OnClickListener {
 

@@ -1,13 +1,14 @@
 package com.inabox.stephen.fowtcg.ui;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Menu;
-import android.view.MenuItem;
+import android.widget.EditText;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import com.inabox.stephen.fowtcg.R;
@@ -34,12 +35,34 @@ public class MainActivity extends AppCompatActivity {
     mAdapter = new CardsAdapter(this);
     mRecycler.setAdapter(mAdapter);
 
-    getSupportLoaderManager().initLoader(mAdapter.getLoaderId(), null, mAdapter);
+    getSupportLoaderManager().initLoader(mAdapter.getLoaderId(), new Bundle(), mAdapter);
   }
 
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
     getMenuInflater().inflate(R.menu.menu_main, menu);
-    return true;
+
+    EditText search = (EditText) menu.findItem(R.id.action_search)
+        .getActionView()
+        .findViewById(R.id.search);
+
+    search.addTextChangedListener(new TextWatcher() {
+      @Override
+      public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+      }
+
+      @Override
+      public void onTextChanged(CharSequence s, int start, int before, int count) {
+      }
+
+      @Override
+      public void afterTextChanged(Editable s) {
+        Bundle args = new Bundle();
+        args.putString("filter", s.toString());
+        getSupportLoaderManager().restartLoader(mAdapter.getLoaderId(), args, mAdapter);
+      }
+    });
+
+    return super.onCreateOptionsMenu(menu);
   }
 }

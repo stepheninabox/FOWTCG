@@ -8,8 +8,8 @@ import android.view.ViewGroup;
 import com.codesmyth.droidcook.common.content.Query;
 import com.codesmyth.droidcook.common.widget.RecyclerCursorAdapter;
 import com.codesmyth.droidcook.common.widget.ViewBinder;
+import com.google.common.base.Strings;
 import com.inabox.stephen.fowtcg.AppContent;
-import com.inabox.stephen.fowtcg.CardsItem;
 
 public class CardsAdapter extends RecyclerCursorAdapter<CardsAdapter> {
 
@@ -24,9 +24,18 @@ public class CardsAdapter extends RecyclerCursorAdapter<CardsAdapter> {
 
   @Override
   public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-    return Query.builder()
+
+    String filter = args.getString("filter", "");
+
+    Query.Builder q = Query.builder()
         .select("_id", "name", "description")
         .from(AppContent.CARDS_URI)
-        .cursorLoader(getContext());
+        .orderBy("name");
+
+    if (!Strings.isNullOrEmpty(filter)) {
+      q.where("name like ?").args("%" + filter + "%");
+    }
+
+    return q.cursorLoader(getContext());
   }
 }
