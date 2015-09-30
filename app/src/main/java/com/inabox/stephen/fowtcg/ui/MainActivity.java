@@ -59,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
       public void afterTextChanged(Editable s) {
         Bundle args = new Bundle();
         args.putString("filter", s.toString());
+        mAdapter.hintRemoveInsert();
         getSupportLoaderManager().restartLoader(mAdapter.getLoaderId(), args, mAdapter);
       }
     });
