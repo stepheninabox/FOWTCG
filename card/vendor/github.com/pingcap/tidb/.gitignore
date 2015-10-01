@@ -1,6 +1,0 @@
-/parser/parser.go
-/parser/scanner.go
-/interpreter/interpreter
-/interpreter/test
-/tidb-server/tidb-server
-coverage.out
