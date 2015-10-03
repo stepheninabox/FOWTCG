@@ -18,7 +18,7 @@ type Card struct {
 
 //FindByTitle is to locate rows by the name
 func FindByTitle(title string) ([]*Card, error) {
-	rows, err := db.Queryx("select * from card where title=?", title)
+	rows, err := db.Queryx("SELECT * FROM card WHERE title LIKE ?", "%"+title+"%")
 	if err != nil {
 		return nil, err
 	}
