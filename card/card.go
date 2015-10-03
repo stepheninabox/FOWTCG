@@ -15,3 +15,22 @@ type Card struct {
 	Rarity  string
 	Descr   string
 }
+
+//FindByTitle is to locate rows by the name
+func FindByTitle(title string) ([]*Card, error) {
+	rows, err := db.Queryx("select * from card where title=?", title)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var cards []*Card
+	for rows.Next() {
+		c := &Card{}
+		if err := rows.StructScan(c); err != nil {
+			return nil, err
+		}
+		cards = append(cards, c)
+	}
+	return cards, rows.Err()
+
+}
