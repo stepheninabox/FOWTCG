@@ -9,6 +9,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import com.codesmyth.droidcook.common.widget.ViewBinder;
 import com.inabox.stephen.fowtcg.R;
+import go.game.Game;
 
 public class CardsItem extends ViewBinder<CardsAdapter> implements View.OnClickListener {
 
@@ -26,8 +27,11 @@ public class CardsItem extends ViewBinder<CardsAdapter> implements View.OnClickL
 
   @Override
   public void bind(CardsAdapter adapter, int pos) {
-    mName.setText(adapter.getCursor().getString("name"));
-    mDescription.setText(Html.fromHtml(adapter.getCursor().getString("description")));
+    Game.Card card = adapter.mCards.Get(pos);
+    mName.setText(card.getTitle());
+    mDescription.setText(card.getDescr());
+//    mName.setText(adapter.getCursor().getString("name"));
+//    mDescription.setText(Html.fromHtml(adapter.getCursor().getString("description")));
   }
 
   @Override

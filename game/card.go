@@ -1,4 +1,4 @@
-package card
+package game
 
 type Card struct {
 	Id      int `db:"_id"`
@@ -16,8 +16,16 @@ type Card struct {
 	Descr   string
 }
 
+type Cards struct {
+	cards []*Card
+}
+
+func (c *Cards) Len() int { return len(c.cards) }
+
+func (c *Cards) Get(pos int) *Card { return c.cards[pos] }
+
 //FindByTitle is to locate rows by the name
-func FindByTitle(title string) ([]*Card, error) {
+func FindByTitle(title string) (*Cards, error) {
 	rows, err := db.Queryx("SELECT * FROM card WHERE title LIKE ?", "%"+title+"%")
 	if err != nil {
 		return nil, err
@@ -31,6 +39,5 @@ func FindByTitle(title string) ([]*Card, error) {
 		}
 		cards = append(cards, c)
 	}
-	return cards, rows.Err()
-
+	return &Cards{cards}, rows.Err()
 }

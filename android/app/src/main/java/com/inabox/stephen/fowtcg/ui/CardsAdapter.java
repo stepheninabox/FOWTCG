@@ -10,8 +10,11 @@ import com.codesmyth.droidcook.common.widget.RecyclerCursorAdapter;
 import com.codesmyth.droidcook.common.widget.ViewBinder;
 import com.google.common.base.Strings;
 import com.inabox.stephen.fowtcg.AppContent;
+import go.game.Game;
 
 public class CardsAdapter extends RecyclerCursorAdapter<CardsAdapter> {
+
+  Game.Cards mCards;
 
   public CardsAdapter(Context context) {
     super(context);
@@ -23,19 +26,29 @@ public class CardsAdapter extends RecyclerCursorAdapter<CardsAdapter> {
   }
 
   @Override
+  public int getItemCount() {
+    return mCards == null ? 0 : (int) mCards.Len();
+  }
+
+  @Override
+  public long getItemId(int position) {
+    return position;
+  }
+
+  @Override
   public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-
-    String filter = args.getString("filter", "");
-
-    Query.Builder q = Query.builder()
-        .select("_id", "name", "description")
-        .from(AppContent.CARDS_URI)
-        .orderBy("name");
-
-    if (!Strings.isNullOrEmpty(filter)) {
-      q.where("name like ?").args("%" + filter + "%");
-    }
-
-    return q.cursorLoader(getContext());
+    return null;
+//    String filter = args.getString("filter", "");
+//
+//    Query.Builder q = Query.builder()
+//        .select("_id", "name", "description")
+//        .from(AppContent.CARDS_URI)
+//        .orderBy("name");
+//
+//    if (!Strings.isNullOrEmpty(filter)) {
+//      q.where("name like ?").args("%" + filter + "%");
+//    }
+//
+//    return q.cursorLoader(getContext());
   }
 }

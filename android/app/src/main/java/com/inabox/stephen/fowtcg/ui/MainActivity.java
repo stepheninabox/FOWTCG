@@ -12,6 +12,7 @@ import android.widget.EditText;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import com.inabox.stephen.fowtcg.R;
+import go.game.Game;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -57,10 +58,18 @@ public class MainActivity extends AppCompatActivity {
 
       @Override
       public void afterTextChanged(Editable s) {
-        Bundle args = new Bundle();
-        args.putString("filter", s.toString());
-        mAdapter.hintRemoveInsert();
-        getSupportLoaderManager().restartLoader(mAdapter.getLoaderId(), args, mAdapter);
+        String title = s.toString();
+        try {
+          mAdapter.mCards = Game.FindByTitle(title);
+          mAdapter.notifyDataSetChanged();
+        } catch (Exception e) {
+          e.printStackTrace();
+        }
+
+//        Bundle args = new Bundle();
+//        args.putString("filter", s.toString());
+//        mAdapter.hintRemoveInsert();
+//        getSupportLoaderManager().restartLoader(mAdapter.getLoaderId(), args, mAdapter);
       }
     });
 

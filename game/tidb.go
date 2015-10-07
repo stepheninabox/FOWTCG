@@ -1,12 +1,12 @@
-package card
+package game
 
 import (
 	"encoding/csv"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"os"
 	"path/filepath"
+	"strings"
 
 	"github.com/jmoiron/sqlx"
 	"github.com/ngaut/log"
@@ -34,11 +34,12 @@ func OpenDB(dir string) (err error) {
 	}
 
 	if init {
-		b, err := ioutil.ReadFile(filepath.Join("data", "schema.sql"))
-		if err != nil {
-			return fmt.Errorf("read schema file failed: %s", err)
-		}
-		if _, err = db.Exec(string(b)); err != nil {
+		// b, err := ioutil.ReadFile(filepath.Join("data", "schema.sql"))
+		// if err != nil {
+		// return fmt.Errorf("read schema file failed: %s", err)
+		// }
+		// if _, err = db.Exec(string(b)); err != nil {
+		if _, err = db.Exec(schemasql); err != nil {
 			return fmt.Errorf("exec schema failed: %s", err)
 		}
 		if err = insertCards(); err != nil {
@@ -51,7 +52,7 @@ func OpenDB(dir string) (err error) {
 
 // Transaction manages a db transaction, automatically calling commit
 // on success or rollback on failure.
-func Transaction(fn func(*sqlx.Tx) error) (err error) {
+func transaction(fn func(*sqlx.Tx) error) (err error) {
 	var tx *sqlx.Tx
 	tx, err = db.Beginx()
 	if err != nil {
@@ -78,19 +79,20 @@ func ps2pi(p []string) []interface{} {
 
 // insertCards reads data from csv and inserts into database.
 func insertCards() error {
-	f, err := os.Open(filepath.Join("data", "cards.csv"))
-	if err != nil {
-		return fmt.Errorf("open cards.csv failed: %s", err)
-	}
-	defer f.Close()
+	// f, err := os.Open(filepath.Join("data", "cards.csv"))
+	// if err != nil {
+	// return fmt.Errorf("open cards.csv failed: %s", err)
+	// }
+	// defer f.Close()
 
-	return Transaction(func(tx *sqlx.Tx) error {
+	return transaction(func(tx *sqlx.Tx) error {
 		stmt, err := tx.Prepare("insert into card values(NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);")
 		if err != nil {
 			return fmt.Errorf("prepare statement failed: %s", err)
 		}
 
-		r := csv.NewReader(f)
+		// r := csv.NewReader(f)
+		r := csv.NewReader(strings.NewReader(cardscsv))
 		r.Comma = '\t'
 		r.FieldsPerRecord = 12
 		r.LazyQuotes = true

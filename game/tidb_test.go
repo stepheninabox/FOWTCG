@@ -1,4 +1,4 @@
-package card
+package game
 
 import (
 	"fmt"
@@ -52,10 +52,10 @@ func TestDatabase(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if len(cards) == 0 {
+	if cards.Len() == 0 {
 		t.Fatal("result length of zero")
 	}
-	for _, c := range cards {
+	for _, c := range cards.cards {
 		t.Logf("%#v\n", c)
 	}
 }
