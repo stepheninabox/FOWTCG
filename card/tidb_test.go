@@ -48,7 +48,7 @@ func TestDatabase(t *testing.T) {
 		t.Fatalf("struct scan failed: %s", err)
 	}
 
-	cards, err := FindByTitle("alice")
+	cards, err := FindByTitle("XeeX")
 	if err != nil {
 		t.Fatal(err)
 	}
